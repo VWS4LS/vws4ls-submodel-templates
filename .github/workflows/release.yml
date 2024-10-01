@@ -1,4 +1,4 @@
-name: publish
+name: release
 on:
   workflow_dispatch:
   release:
@@ -11,15 +11,11 @@ env:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    steps:
+    steps:  
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
     - name: Create Package
       run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }}
-    - name: Publish Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: nuget
-        path: ${{ env.NuGetDirectory }}/*.nupkg
-  
+    - name: Publish Package
+      run: dotnet nuget push ${{ env.NuGetDirectory }}/*.nupkg --source https://nuget.pkg.github.com/vws4ls/index.json --api-key ${{ secrects.NUGET_AUTH_TOKEN }}    
