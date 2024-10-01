@@ -1,6 +1,5 @@
 name: release
 on:
-  workflow_dispatch:
   release:
     types:
     - published
@@ -18,4 +17,4 @@ jobs:
     - name: Create Package
       run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }}
     - name: Publish Package
-      run: dotnet nuget push ${{ env.NuGetDirectory }}/*.nupkg --source https://nuget.pkg.github.com/vws4ls/index.json --api-key ${{ secrets.NUGET_AUTH_TOKEN }}    
+      run: dotnet nuget push ${{ env.NuGetDirectory }}/*.nupkg --skip-duplicate --source https://nuget.pkg.github.com/vws4ls/index.json --api-key ${{ secrets.NUGET_AUTH_TOKEN }}    
