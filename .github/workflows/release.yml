@@ -1,0 +1,24 @@
+name: publish
+on:
+  release:
+    types:
+    - published
+
+env:
+  NuGetDirectory: ${{ github.workspace }}/nuget
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+    - name: Create Package
+      run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }}
+    - name: Publish Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: nuget
+        path: ${{ NuGetDirectory }}/*.nupkg
+  
